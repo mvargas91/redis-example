@@ -2,44 +2,35 @@
 
 ## Descripción
 
-Este proyecto es una aplicación backend reactiva construida sobre **Java 25** y **Spring Boot**, diseñada para ofrecer alto rendimiento y escalabilidad mediante programación no bloqueante. La arquitectura combina persistencia reactiva, mensajería por eventos, autenticación basada en tokens y almacenamiento en caché distribuido.
+Este proyecto es una aplicación backend construida sobre **Java 25** y **Spring Boot**, La arquitectura combina persistencia y almacenamiento en caché distribuido.
 
 ## Tecnologías utilizadas
 
 - **Java 25** — última versión LTS del lenguaje, con soporte para las mejoras más recientes de rendimiento y sintaxis.
 - **Spring Boot** — framework base para la configuración, inyección de dependencias y arranque de la aplicación.
-- **Spring WebFlux (Reactive Flux)** — programación reactiva no bloqueante para exponer y consumir endpoints HTTP, basada en Project Reactor (`Mono` / `Flux`).
-- **R2DBC** — controlador reactivo para el acceso a bases de datos relacionales, evitando el bloqueo de hilos en operaciones de I/O.
-- **MongoDB (Reactive)** — base de datos NoSQL utilizada para el almacenamiento de datos no estructurados o documentos, mediante driver reactivo.
+- **JPA** — controlador para el acceso a bases de datos relacionales, usando un ORM y postgresql.
 - **Redis** — almacenamiento en caché distribuido para mejorar el rendimiento y reducir la carga sobre las bases de datos principales.
-- **Apache Kafka** — sistema de mensajería basado en eventos, utilizado para la comunicación asíncrona entre servicios y el procesamiento de streams de datos.
-- **JWT (JSON Web Token)** — mecanismo de autenticación y autorización sin estado (stateless), utilizado para proteger los endpoints de la API.
 - **Docker** — contenedores para manejar las diferentes tecnologías utilizadas.
 
 ## Arquitectura general
 
-La aplicación sigue un enfoque **reactivo de extremo a extremo**, evitando el uso de hilos bloqueantes en toda la cadena de procesamiento:
+La aplicación sigue un enfoque **persitencia y almacenamiento en cache**, usando redis como herramienta principal para cache:
 
-1. **Capa de seguridad**: los endpoints están protegidos mediante tokens JWT, validados en cada solicitud sin necesidad de mantener sesión en el servidor.
-2. **Capa de acceso a datos**: se combinan dos motores de persistencia según el tipo de dato:
-    - **R2DBC** para datos relacionales y transaccionales.
-    - **MongoDB reactivo** para datos documentales o de esquema flexible.
-3. **Capa de caché**: Redis se utiliza para almacenar resultados frecuentes y reducir la latencia en consultas repetitivas.
-4. **Capa de mensajería**: Kafka gestiona la publicación y consumo de eventos entre los distintos componentes o microservicios del sistema.
-5. **Capa web reactiva**: Spring WebFlux expone los servicios como flujos reactivos (`Mono`/`Flux`), permitiendo manejar múltiples solicitudes concurrentes con un número reducido de hilos.
+1**Capa de acceso a datos**: se combinan dos motores de persistencia según el tipo de dato:
+    - **JPA** para datos relacionales y transaccionales.
+2**Capa de caché**: Redis se utiliza para almacenar resultados frecuentes y reducir la latencia en consultas repetitivas.
+3**Capa web **: Spring Boot expone los servicios APIRest, permitiendo manejar solicitudes.
 
 ## Requisitos previos
 
 - Java 25 (JDK)
 - Maven o Gradle
-- Instancia de MongoDB
 - Instancia de Redis
-- Cluster o instancia de Kafka
-- Base de datos relacional compatible con R2DBC (PostgreSQL, MySQL, etc.)
+- Base de datos relacional compatible con JPA (PostgreSQL, MySQL, etc.)
 
 ## Configuración
 
-Las credenciales y parámetros de conexión (JWT secret, hosts de Redis, Mongo, Kafka y la base de datos relacional) deben definirse en el archivo de configuración de la aplicación (`application.yml` o `application.properties`), o mediante variables de entorno según el entorno de despliegue (desarrollo, pruebas, producción).
+Las credenciales y parámetros de conexión (hosts de Redis y la base de datos relacional) deben definirse en el archivo de configuración de la aplicación (`application.yml` o `application.properties`), o mediante variables de entorno según el entorno de despliegue (desarrollo, pruebas, producción).
 
 ## Ejecución
 
@@ -57,16 +48,19 @@ Las credenciales y parámetros de conexión (JWT secret, hosts de Redis, Mongo, 
 src/
  ├── main/
  │   ├── java/
- │   │   └── com/proyecto/
- │   │       ├── config/        # Configuración de seguridad, JWT, Redis, Kafka, R2DBC
- │   │       ├── controller/    # Endpoints reactivos (WebFlux)
- │   │       ├── service/       # Lógica de negocio
- │   │       ├── repository/    # Repositorios reactivos (R2DBC / Mongo)
- │   │       ├── messaging/     # Productores y consumidores Kafka
- │   │       └── security/      # Filtros y validación de JWT
+ │   │   └── com/mvargas/redis_example
+ │   │       ├── configs/        # Configuración Redis
+ │   │       ├── controllers/    # Endpoints ApiRest
+ │   │       ├── services/       # Lógica de negocio
+ │   │       ├── repositories/   # Repositorios (JPA)
+ │   │       └── models/         # entidades, datos de entrada y salida
+ │   │
  │   └── resources/
  │       └── application.yml
  └── test/
+ │
+ └── ../db/
+        └── sql/     #scripts para la db
 ```
 
 ## Notas adicionales
