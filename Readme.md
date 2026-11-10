@@ -19,7 +19,7 @@ La aplicación sigue un enfoque **persitencia y almacenamiento en cache**, usand
 1. **Capa de acceso a datos**: se combinan dos motores de persistencia según el tipo de dato:
     - **JPA** para datos relacionales y transaccionales.
 2. **Capa de caché**: Redis se utiliza para almacenar resultados frecuentes y reducir la latencia en consultas repetitivas.
-3. **Capa web **: Spring Boot expone los servicios APIRest, permitiendo manejar solicitudes.
+3. **Capa web**: Spring Boot expone los servicios APIRest, permitiendo manejar solicitudes.
 
 ## Requisitos previos
 
