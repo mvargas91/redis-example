@@ -1,4 +1,4 @@
-# Proyecto Reactivo con Spring Boot, Java 25
+# Proyecto Web con Spring Boot, Java 25
 
 ## Descripción
 
@@ -16,10 +16,10 @@ Este proyecto es una aplicación backend construida sobre **Java 25** y **Spring
 
 La aplicación sigue un enfoque **persitencia y almacenamiento en cache**, usando redis como herramienta principal para cache:
 
-1**Capa de acceso a datos**: se combinan dos motores de persistencia según el tipo de dato:
+1. **Capa de acceso a datos**: se combinan dos motores de persistencia según el tipo de dato:
     - **JPA** para datos relacionales y transaccionales.
-2**Capa de caché**: Redis se utiliza para almacenar resultados frecuentes y reducir la latencia en consultas repetitivas.
-3**Capa web **: Spring Boot expone los servicios APIRest, permitiendo manejar solicitudes.
+2. **Capa de caché**: Redis se utiliza para almacenar resultados frecuentes y reducir la latencia en consultas repetitivas.
+3. **Capa web **: Spring Boot expone los servicios APIRest, permitiendo manejar solicitudes.
 
 ## Requisitos previos
 
