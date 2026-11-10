@@ -1,0 +1,44 @@
+services:
+  redis:
+    image: redis:7.4.1-alpine
+    restart: always
+    container_name: products-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass mvargas
+    networks:
+      - products-network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    container_name: products-redis-ui
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:mvargas
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=mvargas
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - products-network
+
+  postgres:
+    image: postgres:17.5
+    container_name: products-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: mvargas
+      POSTGRES_DB: products
+    volumes:
+      - ./db/sql:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - products-network
+
+networks:
+  products-network:
+    driver: bridge
